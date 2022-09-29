@@ -1,14 +1,16 @@
 import re
 import pandas as pd
+from dagster import job, op
 
 NOMBRE_CSV = 'Anime_data.csv'
 
+@op
 def extract():
-
     df_animes = pd.read_csv(NOMBRE_CSV, sep = ',')
 
     return df_animes
 
+@op
 def transform(dataframe):
     df_animes_reducido = dataframe[['Anime_id','Title', 'Genre', 'Synopsis', 'Episodes', 'Link']]
     df_animes_reducido = df_animes_reducido[df_animes_reducido['Genre'].notna()]
@@ -16,10 +18,13 @@ def transform(dataframe):
     df_animes_final['Genre'] = df_animes_reducido['Genre'].apply(generos_tolist)
 
     generos_disponibles = get_genres(df_animes_reducido)
-    return df_animes_final, generos_disponibles
+    return (df_animes_final, generos_disponibles)
 
-def load(dataframe, generos_disponibles):
+@op
+def load(tupla):
 
+    dataframe = tupla[0]
+    generos_disponibles = tupla[1]
     print('Géneros disponibles')
 
     tmp = generos_disponibles.copy()
@@ -28,7 +33,11 @@ def load(dataframe, generos_disponibles):
     for genero in tmp:
         generos += ', ' + genero
     print(generos)
-    genero = input('Inserte el género que desee: ').lower()
+    recomendacion = dataframe.sample()
+    imprimir_anime(recomendacion)
+
+    return 
+'''    genero = input('Inserte el género que desee: ').lower()
 
     genero_invalido = True
 
@@ -79,10 +88,8 @@ def load(dataframe, generos_disponibles):
     else:
 
         recomendacion = df_animes_recomendar.sample()
-    
-    imprimir_anime(recomendacion)
+        '''
 
-    return
 
 def generos_tolist(generos): #Se recibe un string que en realidad tiene estructura de lista
     generos = re.sub('[\\[\\]\'\s]', '', generos)
@@ -216,17 +223,18 @@ def buscar_similar(dataframe, numero):
         except IndexError:
             numero = 0
 
-if __name__ == '__main__':
-    df_animes = extract()
-    df_animes, generos = transform(df_animes)
-    seguir = True
-
+@job
+def main():
+    load(transform(extract()))
+    return 
+'''    df_animes, generos = transform(extract())
+    seguir = False
     while seguir:
-
         load(df_animes, generos)
         continuar = input('¿Quiere alguna otra recomendación? (y/n): ')
 
         if continuar.lower() != 'y':
             seguir = False
-    
     print('Gracias por confiar en nosotros')
+'''
+    
