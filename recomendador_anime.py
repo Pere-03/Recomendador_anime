@@ -35,8 +35,7 @@ def load(tupla):
     print(generos)
     recomendacion = dataframe.sample()
     imprimir_anime(recomendacion)
-
-    return 
+    return
 '''    genero = input('Inserte el género que desee: ').lower()
 
     genero_invalido = True
@@ -88,7 +87,9 @@ def load(tupla):
     else:
 
         recomendacion = df_animes_recomendar.sample()
-        '''
+        imprimir_anime(recomendacion)
+    return'''
+
 
 
 def generos_tolist(generos): #Se recibe un string que en realidad tiene estructura de lista
