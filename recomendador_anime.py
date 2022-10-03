@@ -36,7 +36,7 @@ def load(tupla):
     recomendacion = dataframe.sample()
     imprimir_anime(recomendacion)
     return
-'''    genero = input('Inserte el género que desee: ').lower()
+    '''    genero = input('Inserte el género que desee: ').lower()
 
     genero_invalido = True
 
@@ -89,8 +89,6 @@ def load(tupla):
         recomendacion = df_animes_recomendar.sample()
         imprimir_anime(recomendacion)
     return'''
-
-
 
 def generos_tolist(generos): #Se recibe un string que en realidad tiene estructura de lista
     generos = re.sub('[\\[\\]\'\s]', '', generos)
@@ -228,7 +226,7 @@ def buscar_similar(dataframe, numero):
 def main():
     load(transform(extract()))
     return 
-'''    df_animes, generos = transform(extract())
+    '''    df_animes, generos = transform(extract())
     seguir = False
     while seguir:
         load(df_animes, generos)
